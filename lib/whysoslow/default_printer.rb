@@ -1,30 +1,47 @@
 require 'ansi'
 
-module WhySoSlow
+module Whysoslow
   class DefaultPrinter
 
-    def initialize(results)
-      @results = results
+    def initialize(*args)
+      @opts, @ios = [
+        args.last.kind_of?(::Hash) ? args.pop : {},
+        args.pop || $stdout
+      ]
+      @ios.sync = true
+      @title = @opts[:title]
+      @verbose = @opts[:verbose]
     end
 
-    def print(ios=$stdout, opts={})
-      ios.sync = true
-      puts @results.desc.to_s
-      puts '-'*(@results.desc.to_s.length)
-
-      ios << snapshots_table
-      ios.puts
-      ios << measurements_table
+    def print(thing)
+      case thing
+      when :title
+        if @title
+          @ios.puts @title.to_s
+          @ios.puts '-'*(@title.to_s.length)
+        end
+      when :run_start
+        @ios.print "whysoslow? " if @verbose
+      when :snapshot
+        @ios.print '.' if @verbose
+      when :run_end
+        @ios.print "\n\n" if @verbose
+      when Whysoslow::Results
+        @ios << snapshots_table(thing)
+        @ios.puts
+        @ios << measurements_table(thing)
+      else
+      end
     end
 
     protected
 
-    def snapshots_table
-      units = @results.snapshot_units
+    def snapshots_table(results)
+      units = results.snapshot_units
       tdata = [
-        @results.snapshot_labels.collect { |l| "mem @ #{l}" },
-        @results.snapshot_usages.collect { |u| "#{memory_s(u)} #{units}" },
-        @results.snapshot_diffs.collect do |diff_perc|
+        results.snapshot_labels.collect { |l| "mem @ #{l}" },
+        results.snapshot_usages.collect { |u| "#{memory_s(u)} #{units}" },
+        results.snapshot_diffs.collect do |diff_perc|
           diff = diff_perc.first
           perc = diff_perc.last
           if diff == '??'
@@ -47,11 +64,11 @@ module WhySoSlow
       }).to_s
     end
 
-    def measurements_table
-      units = @results.measurement_units
+    def measurements_table(results)
+      units = results.measurement_units
       tdata = [
         ['', 'time'],
-        @results.measurements.collect do |l_t|
+        results.measurements.collect do |l_t|
           [l_t.first, "#{l_t.last} #{units}"]
         end
       ].flatten
@@ -59,7 +76,7 @@ module WhySoSlow
     end
 
     def snapshots_label_col
-      @results.snapshots.collect{|r| "mem @ #{r.label}" }
+      results.snapshots.collect{|r| "mem @ #{r.label}" }
     end
 
     def memory_s(amount)
@@ -72,38 +89,3 @@ module WhySoSlow
 
   end
 end
-  # def to_s(meas, label)
-  #   # puts @desc.to_s
-  #   # puts '-'*(@desc.to_s.length)
-  #   if meas == :memory
-  #     "#{label_s(label)}:  #{memory_s(@memory_usage[:curr])} MB  #{"(#{memory_basis_s})"}"
-  #   else
-  #     "#{label_s(label)}:  #{time_s(meas)} ms"
-  #   end
-  # end
-
-  # protected
-
-  # def label_s(label); label.rjust(25); end
-  # def time_s(meas); self.send(meas).to_s.rjust(12); end
-  # def memory_s(amount)
-  #   amount.to_s.rjust(6)
-  # end
-  # def perc_s(perc)
-  #   (perc*100).round.abs.to_s.rjust(3)
-  # end
-
-  # def memory_basis_s
-    # if @memory_usage[:prev] == 0
-    #   "??"
-    # else
-    #   diff = (@memory_usage[:curr] - @memory_usage[:prev])
-    #   perc = diff.to_f / @memory_usage[:prev].to_f
-
-    # if diff > 0
-    #   ANSI.red   + "+#{memory_s(diff.abs)} MB, #{perc_s(perc)}%" + ANSI.reset
-    # else
-    #   ANSI.green + "-#{memory_s(diff.abs)} MB, #{perc_s(perc)}%" + ANSI.reset
-    # end
-    # end
-  # end

@@ -1,7 +1,7 @@
 require 'whysoslow/measurement'
 require 'whysoslow/memory_profile'
 
-module WhySoSlow
+module Whysoslow
   class Results
 
     attr_reader :desc

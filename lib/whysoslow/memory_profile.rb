@@ -1,4 +1,4 @@
-module WhySoSlow
+module Whysoslow
 
   class MemoryProfile
 

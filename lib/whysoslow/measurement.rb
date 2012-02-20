@@ -1,6 +1,6 @@
 require 'benchmark'
 
-module WhySoSlow
+module Whysoslow
   class Measurement
 
     MEASUREMENTS = [:user, :system, :total, :real]
