@@ -1,7 +1,8 @@
 PATH
   remote: .
   specs:
-    whysoslow (0.0.1)
+    whysoslow (0.0.2)
+      ansi (~> 1.4)
 
 GEM
   remote: http://rubygems.org/
