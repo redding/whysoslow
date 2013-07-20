@@ -1,8 +1,5 @@
 module Whysoslow
-
   class MemoryProfile
-
-    class Snapshot; end
 
     attr_reader :snapshots, :divider
     attr_accessor :units
@@ -21,26 +18,23 @@ module Whysoslow
     end
 
     def snapshot(label)
-      Snapshot.new(label, @divider).tap { |snap| @snapshots.push(snap) }
+      Snapshot.new(label, @divider).tap{ |snap| @snapshots.push(snap) }
+    end
+
+    class Snapshot
+      attr_reader :label, :memory
+
+      def initialize(label, divider)
+        @label = label
+        @memory = capture_memory_usage(divider)
+      end
+
+      protected
+
+      def capture_memory_usage(divider)
+        ((`ps -o rss= -p #{$$}`.to_i) / divider.to_f)
+      end
     end
 
   end
-
-  class MemoryProfile::Snapshot
-
-    attr_reader :label, :memory
-
-    def initialize(label, divider)
-      @label = label
-      @memory = capture_memory_usage(divider)
-    end
-
-    protected
-
-    def capture_memory_usage(divider)
-      ((`ps -o rss= -p #{$$}`.to_i) / divider.to_f)
-    end
-
-  end
-
 end

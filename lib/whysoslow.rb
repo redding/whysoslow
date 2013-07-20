@@ -1,4 +1,6 @@
-module Whysoslow; end
-
-require 'whysoslow/runner'
+require 'whysoslow/version'
 require 'whysoslow/default_printer'
+require 'whysoslow/runner'
+
+module Whysoslow
+end
