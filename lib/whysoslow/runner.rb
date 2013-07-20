@@ -1,7 +1,6 @@
 require 'whysoslow/results'
 
 module Whysoslow
-
   class Runner
 
     attr_accessor :desc, :verbose, :time_unit, :memory_unit
@@ -27,7 +26,10 @@ module Whysoslow
     end
 
     def snapshot(*args)
-      raise RuntimeError, "no active results being gathered - be sure and call snapshot during a run session" if @results.nil?
+      if @results.nil?
+        raise RuntimeError, "no active results being gathered"\
+                            " - be sure and call snapshot during a run session"
+      end
       @results.snapshot(*args)
       @printer.print :snapshot
     end
