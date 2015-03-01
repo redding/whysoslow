@@ -2,7 +2,7 @@
 
 ## Description
 
-Whysoslow is a little runner/printer I wrote to benchmark my Ruby code.  It runs a block of code, collects run time measurements, and can snapshot memory usage information at various points during execution.
+Whysoslow is a little runner/printer we wrote to benchmark our Ruby code.  It runs a block of code, collects run time measurements, and can snapshot memory usage information at various points during execution.
 
 It has no tests, shockingly sparse docs, and is more of an experiment at this point.  It comes as is for now so use if you see fit.  I will happily accept any pull requests for documentation, tests, extensions, and improvements.
 

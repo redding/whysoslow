@@ -6,11 +6,11 @@ require "whysoslow/version"
 Gem::Specification.new do |gem|
   gem.name        = "whysoslow"
   gem.version     = Whysoslow::VERSION
-  gem.authors     = ["Kelly Redding"]
-  gem.email       = ["kelly@kellyredding.com"]
+  gem.authors     = ["Kelly Redding", "Collin Redding"]
+  gem.email       = ["kelly@kellyredding.com", "collin.redding@me.com"]
   gem.description = %q{A little runner/printer to benchmark Ruby code blocks}
   gem.summary     = %q{A little runner/printer to benchmark Ruby code blocks}
-  gem.homepage    = "http://github.com/kellyredding/whysoslow"
+  gem.homepage    = "http://github.com/redding/whysoslow"
   gem.license     = 'MIT'
 
   gem.files         = `git ls-files`.split($/)
@@ -18,7 +18,7 @@ Gem::Specification.new do |gem|
   gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
   gem.require_paths = ["lib"]
 
-  gem.add_development_dependency("assert", ["~> 2.0"])
+  gem.add_development_dependency("assert", ["~> 2.13"])
 
   gem.add_dependency("ansi", ["~> 1.4"])
 
